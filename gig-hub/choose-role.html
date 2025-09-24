@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gig Hub - Choose Your Role</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e429f;
+            --secondary: #046c4e;
+            --accent: #ff8c00;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --gray-light: #e5e7eb;
+            --success: #059669;
+            --warning: #d97706;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --job-seeker: #1a56db;
+            --employer: #7c3aed;
+            --partner: #dc2626;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: white;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: var(--gradient);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .logo-tagline {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .cta-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f0f7ff 0%, #f0fff4 100%);
+            padding: 150px 0 80px;
+            margin-top: 75px;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(26, 86, 219, 0.1);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--dark);
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        /* Role Selection Section */
+        .role-selection {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(26, 86, 219, 0.1);
+            color: var(--primary);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .section-description {
+            font-size: 18px;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .role-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .job-seeker .card-header {
+            background: linear-gradient(to right, var(--job-seeker), #3b82f6);
+        }
+
+        .employer .card-header {
+            background: linear-gradient(to right, var(--employer), #8b5cf6);
+        }
+
+        .partner .card-header {
+            background: linear-gradient(to right, var(--partner), #ef4444);
+        }
+
+        .card-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .card-body {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .features-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .features-list i {
+            color: var(--primary);
+            margin-right: 10px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .job-seeker .features-list i {
+            color: var(--job-seeker);
+        }
+
+        .employer .features-list i {
+            color: var(--employer);
+        }
+
+        .partner .features-list i {
+            color: var(--partner);
+        }
+
+        .card-footer {
+            margin-top: auto;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .job-seeker .btn-primary {
+            background: var(--job-seeker);
+        }
+
+        .job-seeker .btn-primary:hover {
+            background: #1e40af;
+        }
+
+        .employer .btn-primary {
+            background: var(--employer);
+        }
+
+        .employer .btn-primary:hover {
+            background: #6d28d9;
+        }
+
+        .partner .btn-primary {
+            background: var(--partner);
+        }
+
+        .partner .btn-primary:hover {
+            background: #b91c1c;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--light);
+            padding: 60px 0;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .job-seeker .stat-number {
+            color: var(--job-seeker);
+        }
+
+        .employer .stat-number {
+            color: var(--employer);
+        }
+
+        .partner .stat-number {
+            color: var(--partner);
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 80px 0;
+            background: var(--primary);
+            color: white;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-light {
+            background: white;
+            color: var(--primary);
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-light:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-light {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-outline-light:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-info i {
+            color: var(--primary);
+            width: 20px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Accessibility Features */
+        .accessibility-bar {
+            background: var(--dark);
+            color: white;
+            padding: 10px 0;
+            font-size: 14px;
+            display: none;
+        }
+
+        .accessibility-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .accessibility-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .accessibility-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .high-contrast {
+            filter: contrast(1.5);
+        }
+
+        .large-text {
+            font-size: 18px;
+        }
+
+        .large-text h1, .large-text h2, .large-text h3 {
+            font-size: 1.3em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .section-title {
+                font-size: 30px;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+
+            .accessibility-bar {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Bar -->
+    <div class="accessibility-bar">
+        <div class="container">
+            <div class="accessibility-controls">
+                <button class="accessibility-btn" id="contrastBtn">High Contrast</button>
+                <button class="accessibility-btn" id="textSizeBtn">Large Text</button>
+                <button class="accessibility-btn" id="readAloudBtn">Read Aloud</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div>
+                        <div class="logo-text">Gig Hub</div>
+                        <div class="logo-tagline">Eastern Cape Youth Employment Platform</div>
+                    </div>
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">How It Works</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#" class="cta-button">Log In</a></li>
+                </ul>
+                
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">Join Gig Hub Today</div>
+                <h1 class="hero-title">Choose Your Role in the Gig Hub Community</h1>
+                <p class="hero-description">Whether you're looking for work, hiring talent, or supporting the community, we have a role for you. Select how you want to participate in our platform.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Role Selection Section -->
+    <section class="role-selection">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-badge">Choose Your Role</div>
+                <h2 class="section-title">How Do You Want to Participate?</h2>
+                <p class="section-description">Select the option that best describes how you'd like to use Gig Hub. Each role offers unique features and benefits.</p>
+            </div>
+            <div class="cards-container">
+                <!-- Job Seeker Card -->
+                <div class="role-card job-seeker">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3 class="card-title">Job Seeker</h3>
+                        <p class="card-subtitle">Find local gigs and income opportunities</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> <span>Browse hundreds of local job listings</span></li>
+                            <li><i class="fas fa-check"></i> <span>Apply to gigs with one click</span></li>
+                            <li><i class="fas fa-check"></i> <span>Set your availability and preferred work types</span></li>
+                            <li><i class="fas fa-check"></i> <span>Build your profile with skills and experience</span></li>
+                            <li><i class="fas fa-check"></i> <span>Get matched with employers based on your profile</span></li>
+                            <li><i class="fas fa-check"></i> <span>Receive notifications for new opportunities</span></li>
+                        </ul>
+                        <div class="card-footer">
+                            <a href="job-seeker/set-up-profile.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> Sign Up as Job Seeker</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Employer Card -->
+                <div class="role-card employer">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3 class="card-title">Employer</h3>
+                        <p class="card-subtitle">Find reliable workers for your business needs</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> <span>Post job listings and reach qualified candidates</span></li>
+                            <li><i class="fas fa-check"></i> <span>Filter applicants by skills, experience, and location</span></li>
+                            <li><i class="fas fa-check"></i> <span>Schedule interviews directly through the platform</span></li>
+                            <li><i class="fas fa-check"></i> <span>Manage your hiring process with our tools</span></li>
+                            <li><i class="fas fa-check"></i> <span>Access a pool of pre-vetted local talent</span></li>
+                            <li><i class="fas fa-check"></i> <span>Receive applications and manage hires efficiently</span></li>
+                        </ul>
+                        <div class="card-footer">
+                            <a href="employer/set-up-profile.html" class="btn btn-primary"><i class="fas fa-building"></i> Sign Up as Employer</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community Partner Card -->
+                <div class="role-card partner">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3 class="card-title">Community Partner</h3>
+                        <p class="card-subtitle">Support local employment initiatives</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i> <span>Connect job seekers with training opportunities</span></li>
+                            <li><i class="fas fa-check"></i> <span>Promote your programs and services to our users</span></li>
+                            <li><i class="fas fa-check"></i> <span>Access analytics on local employment trends</span></li>
+                            <li><i class="fas fa-check"></i> <span>Collaborate with other community organizations</span></li>
+                            <li><i class="fas fa-check"></i> <span>Receive referrals for participants in your programs</span></li>
+                            <li><i class="fas fa-check"></i> <span>Help shape local employment initiatives</span></li>
+                        </ul>
+                        <div class="card-footer">
+                            <a href="community-partner/set-up-profile.html" class="btn btn-primary"><i class="fas fa-hands-helping"></i> Sign Up as Partner</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-container">
+                <div class="stat-item job-seeker">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Active Job Seekers</div>
+                </div>
+                <div class="stat-item employer">
+                    <div class="stat-number">1,200+</div>
+                    <div class="stat-label">Registered Employers</div>
+                </div>
+                <div class="stat-item partner">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Community Partners</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15,000+</div>
+                    <div class="stat-label">Successful Matches</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p>Join thousands of Eastern Cape residents who are finding work opportunities and building their communities through Gig Hub.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn-light"><i class="fas fa-question-circle"></i> Need Help Choosing?</a>
+                <a href="#" class="btn-outline-light"><i class="fas fa-envelope"></i> Contact Our Team</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Gig Hub</h3>
+                    <p>Connecting youth with local gigs in the Eastern Cape to reduce unemployment and empower communities.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Job Listings</a></li>
+                        <li><a href="#">Success Stories</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> East London, Eastern Cape</li>
+                        <li><i class="fas fa-phone"></i> +27 43 123 4567</li>
+                        <li><i class="fas fa-envelope"></i> info@gighub.co.za</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Gig Hub. All rights reserved. | EC Innovation Challenge</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Accessibility features
+        document.getElementById('contrastBtn').addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+        });
+
+        document.getElementById('textSizeBtn').addEventListener('click', function() {
+            document.body.classList.toggle('large-text');
+        });
+
+        document.getElementById('readAloudBtn').addEventListener('click', function() {
+            alert('Read aloud feature would be implemented with a text-to-speech API in a production environment.');
+        });
+
+        // Simple text-to-speech implementation for key sections
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // Add click to speak functionality for important sections
+        document.querySelectorAll('.section-title, .hero-title').forEach(element => {
+            element.style.cursor = 'pointer';
+            element.title = 'Click to hear this text';
+            
+            element.addEventListener('click', function() {
+                speakText(this.textContent);
+            });
+        });
+
+        // Stats counter animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                let current = 0;
+                const increment = target / 100;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = target.toLocaleString() + '+';
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            });
+        });
+    </script>
+</body>
+</html>
