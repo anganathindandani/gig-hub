@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gig Hub - Employer Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4bb543;
+            --warning: #ffcc00;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            transition: all 0.3s;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .logo i {
+            font-size: 28px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .nav-links li {
+            margin-bottom: 5px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            z-index: 1100;
+            cursor: pointer;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 250px;
+            transition: margin-left 0.3s;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 30px;
+            padding: 8px 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            padding: 5px 10px;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .notification {
+            position: relative;
+            margin-right: 20px;
+            font-size: 20px;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .notification .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-header h2 {
+            font-size: 18px;
+            color: var(--dark);
+        }
+
+        .card-header i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        /* Welcome Card */
+        .welcome-card {
+            grid-column: span 2;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .profile-completion {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: white;
+            width: 80%;
+            border-radius: 4px;
+        }
+
+        /* Applicant Listings */
+        .applicant-listings {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .applicant-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .applicant-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .applicant-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .applicant-name {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .applicant-name img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .applicant-rating {
+            font-weight: 700;
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+        }
+
+        .applicant-rating i {
+            margin-right: 5px;
+        }
+
+        .applicant-body {
+            padding: 15px;
+        }
+
+        .applicant-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .applicant-meta {
+            display: flex;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .applicant-meta div {
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .applicant-meta i {
+            margin-right: 5px;
+        }
+
+        .applicant-footer {
+            padding: 15px;
+            background: var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3a9433;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Activity Section */
+        .activity-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .activity-card, .quick-post-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .activity-item {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary);
+        }
+
+        .activity-details h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .activity-details p {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Quick Post Form */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light-gray);
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        /* Job Listings Table */
+        .job-listings {
+            margin: 30px 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .table th, .table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .table th {
+            background: var(--light);
+            font-weight: 600;
+        }
+
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #e6f7ee;
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: #fff8e6;
+            color: var(--warning);
+        }
+
+        .status-closed {
+            background: #ffe6e6;
+            color: var(--danger);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .welcome-card {
+                grid-column: span 1;
+            }
+            
+            .activity-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-cards, .applicant-listings {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-bar {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                <h1>Gig Hub</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-briefcase"></i> My Job Posts</a></li>
+                <li><a href="#"><i class="fas fa-users"></i> Applicants</a></li>
+                <li><a href="#"><i class="fas fa-search"></i> Find Workers</a></li>
+                <li><a href="#"><i class="fas fa-wallet"></i> Payments</a></li>
+                <li><a href="#"><i class="fas fa-comments"></i> Messages <span class="badge">5</span></a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> Business Profile</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Header -->
+            <div class="header">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for workers...">
+                </div>
+                <div class="user-info">
+                    <div class="notification">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">3</span>
+                    </div>
+                    <img src="https://i.pravatar.cc/150?img=5" alt="User">
+                    <div>
+                        <h3>Eastern Cape Farms</h3>
+                        <p>Business Account</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <!-- Welcome Card -->
+                <div class="card welcome-card">
+                    <div class="welcome-text">
+                        <h2>Welcome back, Eastern Cape Farms!</h2>
+                        <p>You have 12 active job posts and 5 new applicants this week.</p>
+                        <div class="profile-completion">
+                            <p>Business Profile: 90% complete</p>
+                            <div class="progress-bar">
+                                <div class="progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="welcome-icon">
+                        <i class="fas fa-building fa-3x"></i>
+                    </div>
+                </div>
+
+                <!-- Active Jobs Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Active Job Posts</h2>
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="card-body">
+                        <h3>12</h3>
+                        <p>Currently active job posts</p>
+                        <p style="color: var(--success);">+3 from last month</p>
+                    </div>
+                </div>
+
+                <!-- Applicants Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>New Applicants</h2>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-body">
+                        <h3>24</h3>
+                        <p>Applicants this month</p>
+                        <p>5 awaiting review</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Post New Job -->
+            <div class="quick-post-card">
+                <div class="card-header">
+                    <h2>Post a New Job</h2>
+                </div>
+                <form id="jobPostForm">
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title</label>
+                        <input type="text" id="jobTitle" class="form-control" placeholder="e.g., Farm Hand Needed">
+                    </div>
+                    <div class="form-group">
+                        <label for="jobCategory">Category</label>
+                        <select id="jobCategory" class="form-control">
+                            <option value="">Select a category</option>
+                            <option value="farm">Farm Work</option>
+                            <option value="construction">Construction</option>
+                            <option value="cleaning">Cleaning</option>
+                            <option value="tutoring">Tutoring</option>
+                            <option value="delivery">Delivery</option>
+                            <option value="plumbing">Plumbing</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="jobBudget">Budget (ZAR)</label>
+                        <input type="number" id="jobBudget" class="form-control" placeholder="e.g., 500">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-plus"></i> Post Job
+                    </button>
+                </form>
+            </div>
+
+            <!-- Recent Applicants -->
+            <h2 style="margin-bottom: 15px; margin-top: 30px;">Recent Applicants</h2>
+            <div class="applicant-listings">
+                <!-- Applicant 1 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-name">
+                            <img src="https://i.pravatar.cc/150?img=32" alt="Applicant">
+                            Thando Mbeki
+                        </div>
+                        <div class="applicant-rating">
+                            <i class="fas fa-star"></i> 4.8
+                        </div>
+                    </div>
+                    <div class="applicant-body">
+                        <h3 class="applicant-title">Farm Hand Position</h3>
+                        <div class="applicant-meta">
+                            <div><i class="fas fa-map-marker-alt"></i> East London</div>
+                            <div><i class="fas fa-clock"></i> Applied 2 days ago</div>
+                        </div>
+                        <p>Experienced with seasonal fruit picking and farm maintenance. Available immediately.</p>
+                    </div>
+                    <div class="applicant-footer">
+                        <button class="btn btn-outline">View Profile</button>
+                        <button class="btn btn-primary">Message</button>
+                    </div>
+                </div>
+
+                <!-- Applicant 2 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-name">
+                            <img src="https://i.pravatar.cc/150?img=12" alt="Applicant">
+                            Sipho Ndlovu
+                        </div>
+                        <div class="applicant-rating">
+                            <i class="fas fa-star"></i> 4.5
+                        </div>
+                    </div>
+                    <div class="applicant-body">
+                        <h3 class="applicant-title">Delivery Assistant</h3>
+                        <div class="applicant-meta">
+                            <div><i class="fas fa-map-marker-alt"></i> Mthatha</div>
+                            <div><i class="fas fa-clock"></i> Applied 1 day ago</div>
+                        </div>
+                        <p>Owns a reliable vehicle. Available for daily deliveries across the region.</p>
+                    </div>
+                    <div class="applicant-footer">
+                        <button class="btn btn-outline">View Profile</button>
+                        <button class="btn btn-primary">Message</button>
+                    </div>
+                </div>
+
+                <!-- Applicant 3 -->
+                <div class="applicant-card">
+                    <div class="applicant-header">
+                        <div class="applicant-name">
+                            <img src="https://i.pravatar.cc/150?img=8" alt="Applicant">
+                            Nomsa Dlamini
+                        </div>
+                        <div class="applicant-rating">
+                            <i class="fas fa-star"></i> 5.0
+                        </div>
+                    </div>
+                    <div class="applicant-body">
+                        <h3 class="applicant-title">Tutor for Grade 10 Math</h3>
+                        <div class="applicant-meta">
+                            <div><i class="fas fa-map-marker-alt"></i> Port Elizabeth</div>
+                            <div><i class="fas fa-clock"></i> Applied 3 hours ago</div>
+                        </div>
+                        <p>Mathematics graduate with 3 years tutoring experience. Available evenings and weekends.</p>
+                    </div>
+                    <div class="applicant-footer">
+                        <button class="btn btn-outline">View Profile</button>
+                        <button class="btn btn-success">Hire Now</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Listings Table -->
+            <div class="job-listings">
+                <h2 style="margin-bottom: 15px;">Your Job Posts</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Category</th>
+                            <th>Applicants</th>
+                            <th>Budget</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Seasonal Fruit Picker</td>
+                            <td>Farm Work</td>
+                            <td>8</td>
+                            <td>R 200/day</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Office Cleaning</td>
+                            <td>Cleaning</td>
+                            <td>5</td>
+                            <td>R 350</td>
+                            <td><span class="status-badge status-active">Active</span></td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Math Tutor Needed</td>
+                            <td>Tutoring</td>
+                            <td>3</td>
+                            <td>R 150/hr</td>
+                            <td><span class="status-badge status-pending">Pending</span></td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Edit</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Plumbing Repair</td>
+                            <td>Plumbing</td>
+                            <td>12</td>
+                            <td>R 500</td>
+                            <td><span class="status-badge status-closed">Closed</span></td>
+                            <td>
+                                <button class="btn btn-outline" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Repost</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Activity and Quick Stats Section -->
+            <div class="activity-section">
+                <!-- Recent Activity -->
+                <div class="activity-card">
+                    <div class="card-header">
+                        <h2>Recent Activity</h2>
+                    </div>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-details">
+                                <h4>New Applicant</h4>
+                                <p>Thando Mbeki applied for "Farm Hand Position".</p>
+                                <p>2 days ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-details">
+                                <h4>Job Completed</h4>
+                                <p>"Office Cleaning" gig marked as completed.</p>
+                                <p>3 days ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="activity-details">
+                                <h4>New Review</h4>
+                                <p>You received a 5-star review from Sipho Ndlovu.</p>
+                                <p>1 week ago</p>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div class="activity-details">
+                                <h4>New Job Posted</h4>
+                                <p>You posted "Seasonal Fruit Picker" job.</p>
+                                <p>1 week ago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quick Stats</h2>
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Hire Rate</span>
+                            <span>65%</span>
+                        </div>
+                        <div style="height: 10px; background: var(--light-gray); border-radius: 5px; margin-bottom: 15px;">
+                            <div style="height: 100%; width: 65%; background: var(--success); border-radius: 5px;"></div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Avg. Response Time</span>
+                            <span>4.2 hrs</span>
+                        </div>
+                        <div style="height: 10px; background: var(--light-gray); border-radius: 5px; margin-bottom: 15px;">
+                            <div style="height: 100%; width: 70%; background: var(--primary); border-radius: 5px;"></div>
+                        </div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span>Repeat Workers</span>
+                            <span>42%</span>
+                        </div>
+                        <div style="height: 10px; background: var(--light-gray); border-radius: 5px;">
+                            <div style="height: 100%; width: 42%; background: var(--accent); border-radius: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+
+        menuToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 992) {
+                const isClickInsideSidebar = sidebar.contains(event.target);
+                const isClickInsideMenuToggle = menuToggle.contains(event.target);
+                
+                if (!isClickInsideSidebar && !isClickInsideMenuToggle && sidebar.classList.contains('active')) {
+                    sidebar.classList.remove('active');
+                }
+            }
+        });
+
+        // Job post form submission
+        document.getElementById('jobPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const jobTitle = document.getElementById('jobTitle').value;
+            const jobCategory = document.getElementById('jobCategory').value;
+            const jobBudget = document.getElementById('jobBudget').value;
+            
+            if (jobTitle && jobCategory && jobBudget) {
+                alert(`Job "${jobTitle}" posted successfully!`);
+                this.reset();
+            } else {
+                alert('Please fill in all fields');
+            }
+        });
+
+        // Applicant action buttons
+        const applicantButtons = document.querySelectorAll('.applicant-footer .btn');
+        applicantButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const applicantName = this.closest('.applicant-card').querySelector('.applicant-name').textContent.trim();
+                
+                if (this.classList.contains('btn-outline')) {
+                    alert(`Viewing profile of ${applicantName}`);
+                } else if (this.classList.contains('btn-primary')) {
+                    alert(`Opening message thread with ${applicantName}`);
+                } else if (this.classList.contains('btn-success')) {
+                    alert(`Hiring ${applicantName}! We'll notify them immediately.`);
+                    this.textContent = 'Hired!';
+                    this.disabled = true;
+                }
+            });
+        });
+
+        // Notification bell click
+        document.querySelector('.notification').addEventListener('click', function() {
+            alert('You have 3 new notifications:\n- New applicant for Farm Hand position\n- Payment reminder for completed gig\n- Worker availability update');
+        });
+
+        // Job table action buttons
+        const jobActionButtons = document.querySelectorAll('.table .btn');
+        jobActionButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const jobTitle = this.closest('tr').querySelector('td:first-child').textContent;
+                
+                if (this.classList.contains('btn-outline')) {
+                    alert(`Viewing details for: ${jobTitle}`);
+                } else if (this.textContent.includes('Edit')) {
+                    alert(`Editing job: ${jobTitle}`);
+                } else if (this.textContent.includes('Repost')) {
+                    alert(`Reposting job: ${jobTitle}`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
